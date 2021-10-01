@@ -1,0 +1,17 @@
+{
+  "Category": "",
+  "Description": "",
+  "EngineAssociation": "4.26",
+  "FileVersion": 3,
+  "Modules": [
+    {
+      "AdditionalDependencies": [
+        "Engine",
+        "UMG"
+      ],
+      "LoadingPhase": "Default",
+      "Name": "LudumDare49",
+      "Type": "Runtime"
+    }
+  ]
+}
