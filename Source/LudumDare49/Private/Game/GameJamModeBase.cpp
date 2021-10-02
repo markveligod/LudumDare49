@@ -5,10 +5,15 @@
 #include "Menu/MSBJGameInstance.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/KismetInternationalizationLibrary.h"
+#include "Game/HUD/GameHUD.h"
+#include "Game/GoodBall/GoodBallPawn.h"
+#include "Game/GoodBall/GoodBallPlayerController.h"
 
 AGameJamModeBase::AGameJamModeBase()
 {
-
+    HUDClass = AGameHUD::StaticClass();
+    DefaultPawnClass = AGoodBallPawn::StaticClass();
+    PlayerControllerClass = AGoodBallPlayerController::StaticClass();
 }
 
 void AGameJamModeBase::StartPlay()
@@ -21,7 +26,7 @@ void AGameJamModeBase::StartPlay()
 	checkf(this->UserSettings, TEXT("User settings is nullptr"));
 
 	this->SetupStartLevelSettings();
-	this->ChangeGameState(EGameLevelState::GameOver);
+	this->ChangeGameState(EGameLevelState::WaitToStart);
 }
 
 void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
