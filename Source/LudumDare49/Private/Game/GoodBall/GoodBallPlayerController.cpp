@@ -7,10 +7,11 @@
 void AGoodBallPlayerController::BeginPlay()
 {
     Super::BeginPlay();
-
+    
     this->GameMode = Cast<AGameJamModeBase>(GetWorld()->GetAuthGameMode());
     checkf(this->GameMode, TEXT("Game mode is nullptr"));
     this->GameMode->OnGameLevelStateChanged.AddUObject(this, &AGoodBallPlayerController::OnChangeGameState);
+    this->OnChangeGameState(EGameLevelState::WaitToStart);
 }
 
 void AGoodBallPlayerController::OnChangeGameState(EGameLevelState NewState)
