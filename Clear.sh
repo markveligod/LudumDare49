@@ -1,5 +1,6 @@
 #!/bin/bash
 rm -rf ./Binaries
+rm -rf ./.idea
 rm -rf ./DerivedDataCache
 rm -rf ./Intermediate
 rm -rf ./Saved
