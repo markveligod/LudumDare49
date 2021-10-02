@@ -16,6 +16,24 @@ AGameJamModeBase::AGameJamModeBase()
     PlayerControllerClass = AGoodBallPlayerController::StaticClass();
 }
 
+FString AGameJamModeBase::ConvertCurrentTimer() const
+{
+    if (this->TimeFromStart == 0) return(FString("00:00"));
+    int32 Min = 0;
+    int32 TempTime = this->TimeFromStart;
+    
+    while (TempTime >= 60)
+    {
+        Min++;
+        TempTime -= 60;
+    }
+    int32 Sec = TempTime;
+    FString TextMin = (Min == 0) ? "00" : FString::FromInt(Min);
+    FString TextSec = (Sec >= 0 && Sec <= 9) ? "0" + FString::FromInt(Sec) : FString::FromInt(Sec);
+    
+    return (FString(TextMin + ":" + TextSec));
+}
+
 void AGameJamModeBase::StartPlay()
 {
 	Super::StartPlay();
@@ -33,6 +51,14 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 {
 	if (this->CurrentGameState == NewState)
 		return;
+    if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
+    {
+        GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
+    }
+    if (this->CurrentGameState == EGameLevelState::InProgress && NewState == EGameLevelState::GameOver)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(this->HandleUpTime);
+    }
 	this->CurrentGameState = NewState;
 	this->OnGameLevelStateChanged.Broadcast(NewState);
 }
@@ -52,4 +78,9 @@ void AGameJamModeBase::SetupStartLevelSettings()
 	this->UserSettings->SetViewDistanceQuality(this->GameInst->GetCurrentQualityValue());
 	this->UserSettings->SetVisualEffectQuality(this->GameInst->GetCurrentQualityValue());
 	this->UserSettings->ApplySettings(false);
+}
+
+void AGameJamModeBase::IncrementTime()
+{
+    this->TimeFromStart++;
 }

@@ -21,6 +21,8 @@ public:
 
     FOnGameLevelStateChangedSignature OnGameLevelStateChanged;
 
+    UFUNCTION(BlueprintCallable)
+    FString ConvertCurrentTimer() const;
 protected:
     virtual void StartPlay() override;
 
@@ -30,4 +32,9 @@ private:
     EGameLevelState CurrentGameState = EGameLevelState::WaitToStart;
 
     void SetupStartLevelSettings();
+
+    int32 TimeFromStart = 0;
+    FTimerHandle HandleUpTime;
+    void IncrementTime();
+
 };
