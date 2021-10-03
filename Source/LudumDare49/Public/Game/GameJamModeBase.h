@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraSystem.h"
+#include "BossBall/BossBallPawn.h"
 #include "GameFramework/GameModeBase.h"
 #include "Menu/MSBJDataTypes.h"
 #include "GameJamModeBase.generated.h"
 
-
+class UNiagaraComponent;
 class UMiniUserWidget;
 class AGoodBallPawn;
 class ABadBallPawn;
@@ -28,7 +30,7 @@ public:
     UFUNCTION(BlueprintCallable)
     FString ConvertCurrentTimer() const;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings game")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings game")
     int32 Neutrons = 100;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings game")
     int32 DecreaseCountNeutrons = 1;
@@ -40,7 +42,7 @@ public:
     bool StateMini = false;
     TArray<ABadBallPawn*> ArrayBadBalls;
     ABadBallPawn* BadBallPointer;
-    
+
     UMiniUserWidget* WidgetMiniPointer;
 
     UPROPERTY(BlueprintReadOnly)
@@ -62,11 +64,15 @@ public:
     float DecreaseRunTime = 0.05f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings Mini loli-pop")
     int32 DecreaseCountMax = 5;
-    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+    UNiagaraSystem* DeathEffect;
 protected:
     virtual void StartPlay() override;
 
+    
+
 private:
+    TArray<ABossBallPawn*> ArrayBoss;
     class UMSBJGameInstance* GameInst;
     class UGameUserSettings* UserSettings;
     EGameLevelState CurrentGameState = EGameLevelState::WaitToStart;

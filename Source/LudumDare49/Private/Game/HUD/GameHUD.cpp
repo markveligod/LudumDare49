@@ -30,7 +30,6 @@ void AGameHUD::BeginPlay()
     this->GameMode = Cast<AGameJamModeBase>(GetWorld()->GetAuthGameMode());
     checkf(this->GameMode, TEXT("Game Mode is nullptr"));
     this->GameMode->OnGameLevelStateChanged.AddUObject(this, &AGameHUD::OnChangedGameState);
-    this->OnChangedGameState(EGameLevelState::WaitToStart);
 }
 
 void AGameHUD::OnChangedGameState(EGameLevelState NewState)

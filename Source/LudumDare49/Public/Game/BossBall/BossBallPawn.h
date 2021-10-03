@@ -12,6 +12,8 @@
 USphereComponent;
 ANeutronActor;
 
+class UNiagaraSystem;
+
 UCLASS()
 class LUDUMDARE49_API ABossBallPawn : public APawn
 {
@@ -24,10 +26,15 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
+    bool StateMove = true;
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Niagara")
+    UNiagaraSystem* DeathEffect;
+    
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     UStaticMeshComponent* Mesh = nullptr;
 

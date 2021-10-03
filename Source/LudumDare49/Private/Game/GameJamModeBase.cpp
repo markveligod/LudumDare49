@@ -13,6 +13,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Menu/HUD/UI/MSBJCreditsWidget.h"
 #include "Game/HUD/UI/MiniUserWidget.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogGameJamModeBase, All, All);
 
 AGameJamModeBase::AGameJamModeBase()
 {
@@ -63,6 +67,7 @@ void AGameJamModeBase::StopMini()
     this->MaxRunGameOver -= this->DecreaseCountMax;
     this->RateTimeDecrease -= this->DecreaseRunTime;
     this->StateMini = false;
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->DeathEffect, this->BadBallPointer->GetActorLocation());
     this->BadBallPointer->Destroy();
     this->WidgetMiniPointer->RemoveFromViewport();
     this->WidgetMiniPointer->Destruct();
@@ -85,36 +90,48 @@ void AGameJamModeBase::StartPlay()
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABadBallPawn::StaticClass(), TempArray);
     for (auto TempActor : TempArray)
         if (TempActor->IsA(ABadBallPawn::StaticClass()))
-                this->ArrayBadBalls.Add(Cast<ABadBallPawn>(TempActor));
+            this->ArrayBadBalls.Add(Cast<ABadBallPawn>(TempActor));
 
+    TempArray.Empty();
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABossBallPawn::StaticClass(), TempArray);
+    for (auto TempActor : TempArray)
+        if (TempActor->IsA(ABossBallPawn::StaticClass()))
+            this->ArrayBoss.Add(Cast<ABossBallPawn>(TempActor));
 
     this->GoodBall = Cast<AGoodBallPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AGoodBallPawn::StaticClass()));
-  //  check(this->GoodBall);
+    check(this->GoodBall);
 
     this->MaxRunGameOver = this->StartMaxRunGameOver;
     this->RateTimeCallUp = this->StartRateTimeCallUp;
-    
+
     this->ChangeGameState(EGameLevelState::WaitToStart);
 }
 
 void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 {
-    if (this->CurrentGameState == NewState)
-        return;
-
+    UE_LOG(LogGameJamModeBase, Display, TEXT("New State: %s"), *UEnum::GetValueAsString(NewState));
     if (NewState == EGameLevelState::WaitToStart || NewState == EGameLevelState::GameOver)
-    
+    {
+        for (auto TempBadBall : this->ArrayBadBalls)
+            TempBadBall->StateMove = false;
+        for (auto TempBoss : this->ArrayBoss)
+            TempBoss->StateMove = false;
+        
+    }
+
     if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
     {
         GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
         GetWorld()->GetTimerManager().SetTimer(this->HandleDecreaseTimer, this, &AGameJamModeBase::DecreaseCount, this->RateTimeDecrease,
             true);
+        for (auto TempBadBall : this->ArrayBadBalls)
+            TempBadBall->StateMove = true;
+        for (auto TempBoss : this->ArrayBoss)
+            TempBoss->StateMove = true;
     }
     if (this->CurrentGameState == EGameLevelState::InProgress && NewState == EGameLevelState::GameOver)
     {
         GetWorld()->GetTimerManager().ClearTimer(this->HandleUpTime);
-        for(auto TempBadBall : this->ArrayBadBalls)
-            TempBadBall->StateMove = false;
     }
     this->CurrentGameState = NewState;
     this->OnGameLevelStateChanged.Broadcast(NewState);

@@ -9,6 +9,7 @@
 #include "DrawDebugHelpers.h"
 #include "Game/BadBall/BadBallPawn.h"
 #include "Game/GameJamModeBase.h"
+#include "Game/BossBall/BossBallPawn.h"
 
 // Sets default values
 AGoodBallPawn::AGoodBallPawn()
@@ -106,6 +107,12 @@ void AGoodBallPawn::NotifyHit(UPrimitiveComponent* MyComponent, AActor* Other, U
         this->BallMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
         this->GameMode->StartMini(Cast<ABadBallPawn>(Other));
     }
+    if (Other && Other->IsA(ABossBallPawn::StaticClass()) && this->StateMove == true)
+    {
+        this->GameMode->ChangeGameState(EGameLevelState::GameOver);
+        this->StateMove = false;
+    }
+    
     
     InContact = true;
 }

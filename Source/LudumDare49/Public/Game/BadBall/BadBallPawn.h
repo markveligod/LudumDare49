@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "BadBallPawn.generated.h"
 
+
+
 UCLASS()
 class LUDUMDARE49_API ABadBallPawn : public APawn
 {

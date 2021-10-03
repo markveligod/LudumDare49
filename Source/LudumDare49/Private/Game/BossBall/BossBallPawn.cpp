@@ -9,6 +9,7 @@
 #include "Components/MeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBossBall, All, All)
 
@@ -67,7 +68,8 @@ void ABossBallPawn::MoveImpulse()
     ImpulseDirection = PlayerPawn->GetActorLocation() - this->GetActorLocation();  // vector from BossBall to GoodBall
 
     if (ImpulseDirection.Size() > MaxDetectDistance) return;  // max range of detecting GoodBall
-
+    if (this->StateMove == false) return;
+    
     // add random deviation of impulse to base vector
     ImpulseDirection = ImpulseDirection + MoveImpulseScale * FVector(                                                         //
                                                                  FMath::RandRange(MinDeviationImpulse, MaxDeviationImpulse),  // X
@@ -80,6 +82,7 @@ void ABossBallPawn::MoveImpulse()
 
 void ABossBallPawn::Death()
 {
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->DeathEffect, GetActorLocation());
     this->Destroy();
 }
 
