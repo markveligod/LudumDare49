@@ -16,8 +16,12 @@ public:
     // Sets default values for this actor's properties
     ANeutronActor();
 
+    // need for setting the number of spawned neutrons
+    void SetNeutronCount(int32 Neutrons) { CountNeutron = Neutrons; };
+
     // Called every frame
     virtual void Tick(float DeltaTime) override;
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
