@@ -23,6 +23,14 @@ public:
 
     UFUNCTION(BlueprintCallable)
     FString ConvertCurrentTimer() const;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings game")
+    int32 Neutrons = 100;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings game")
+    int32 DecreaseCountNeutrons = 1;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings game")
+    float RateTimeDecrease = 5.f;
+    
 protected:
     virtual void StartPlay() override;
 
@@ -37,4 +45,6 @@ private:
     FTimerHandle HandleUpTime;
     void IncrementTime();
 
+    FTimerHandle HandleDecreaseTimer;
+    void DecreaseCount();
 };

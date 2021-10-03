@@ -54,6 +54,7 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
     if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
     {
         GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
+        GetWorld()->GetTimerManager().SetTimer(this->HandleDecreaseTimer, this, &AGameJamModeBase::DecreaseCount, this->RateTimeDecrease, true);
     }
     if (this->CurrentGameState == EGameLevelState::InProgress && NewState == EGameLevelState::GameOver)
     {
@@ -83,4 +84,14 @@ void AGameJamModeBase::SetupStartLevelSettings()
 void AGameJamModeBase::IncrementTime()
 {
     this->TimeFromStart++;
+}
+
+void AGameJamModeBase::DecreaseCount()
+{
+    this->Neutrons -= this->DecreaseCountNeutrons;
+    if (this->Neutrons <= 0)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(this->HandleDecreaseTimer);
+        this->ChangeGameState(EGameLevelState::GameOver);
+    }
 }
