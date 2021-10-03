@@ -4,7 +4,9 @@
 #include "Game/GoodBall/GoodBallPawn.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/PlayerInput.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AGoodBallPawn::AGoodBallPawn()
@@ -41,13 +43,31 @@ void AGoodBallPawn::BeginPlay()
     this->BallMesh->SetAngularDamping(0.5f);
 }
 
-void AGoodBallPawn::UpdateMoveBall()
+void AGoodBallPawn::AddControllerYawInput(float Val)
 {
+    Super::AddControllerYawInput(Val);
+    FRotator TempRot = this->SpringArm->GetRelativeRotation();
+    TempRot.Yaw += Val;
+    TempRot.Roll = 0.f;
+    this->SpringArm->SetRelativeRotation(TempRot);
+}
+
+void AGoodBallPawn::AddControllerPitchInput(float Val)
+{
+    Super::AddControllerPitchInput(Val);
+    FRotator TempRot = this->SpringArm->GetRelativeRotation();
+    TempRot.Pitch += Val;
+    TempRot.Roll = 0.f;
+    this->SpringArm->SetRelativeRotation(TempRot);
+}
+
+void AGoodBallPawn::AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce)
+{
+    Super::AddMovementInput(WorldDirection, ScaleValue, bForce);
+    
     FVector velocity = BallMesh->GetPhysicsLinearVelocity();
     float z = velocity.Z;
-
     velocity.Z = 0.0f;
-
     if (velocity.Size() > MaximumSpeed * 100.0f)
     {
         velocity.Normalize();
@@ -60,8 +80,36 @@ void AGoodBallPawn::UpdateMoveBall()
     }
     else
     {
-        this->BallMesh->AddForce(FVector(InputLongitude, InputLatitude, 0.0f) * ControllerForce * BallMesh->GetMass());
+        WorldDirection.X *= ScaleValue;
+        WorldDirection.Y *= ScaleValue;
+        WorldDirection.Z = 0;
+        this->BallMesh->AddForce(WorldDirection * ControllerForce * BallMesh->GetMass());
     }
+}
+
+void AGoodBallPawn::UpdateForwardLocation()
+{
+    FVector StartPos = this->BallMesh->GetComponentLocation();
+    FRotator TempRot = this->SpringArm->GetRelativeRotation();
+    TempRot.Pitch = 0.f;
+    TempRot.Roll = 0.f;
+    FVector EndPos = StartPos + TempRot.Vector() * 300.f;
+
+    ForwardLocation = (EndPos - StartPos);
+    ForwardLocation.Normalize();
+}
+
+void AGoodBallPawn::UpdateRightLocation()
+{
+    FVector StartPos = this->BallMesh->GetComponentLocation();
+    FRotator TempRot = this->SpringArm->GetRelativeRotation();
+    TempRot.Pitch = 0.f;
+    TempRot.Yaw += 90.f;
+    TempRot.Roll = 0.f;
+    FVector EndPos = StartPos + TempRot.Vector() * 300.f;
+
+    RightLocation = (EndPos - StartPos);
+    RightLocation.Normalize();
 }
 
 // Called every frame
@@ -69,7 +117,10 @@ void AGoodBallPawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     InContact = false;
-    this->UpdateMoveBall();
+    this->UpdateForwardLocation();
+    DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + ForwardLocation * 300.f, FColor::Red, false, -1, 0, 5);
+    this->UpdateRightLocation();
+    DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + RightLocation * 300.f, FColor::Blue, false, -1, 0, 5);
 }
 
 // Setup Key for bind
@@ -85,6 +136,8 @@ static void InitializeDefaultPawnInputBindings()
         UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("GoodBall_MoveLongitudinally", EKeys::S, -1.f));
         UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("GoodBall_MoveLaterally", EKeys::A, -1.f));
         UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("GoodBall_MoveLaterally", EKeys::D, 1.f));
+        UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("GoodBall_Turn", EKeys::MouseX, 1.f));
+        UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("GoodBall_LookUp", EKeys::MouseY, 1.f));
     }
 }
 
@@ -97,5 +150,7 @@ void AGoodBallPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
     {
         PlayerInputComponent->BindAxis("GoodBall_MoveLongitudinally", this, &AGoodBallPawn::MoveLongitudinally);
         PlayerInputComponent->BindAxis("GoodBall_MoveLaterally", this, &AGoodBallPawn::MoveLaterally);
+        PlayerInputComponent->BindAxis("GoodBall_Turn", this, &AGoodBallPawn::AddControllerYawInput);
+        PlayerInputComponent->BindAxis("GoodBall_LookUp", this, &AGoodBallPawn::AddControllerPitchInput);
     }
 }

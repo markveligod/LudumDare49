@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "GoodBallPawn.generated.h"
 
+class UArrowComponent;
 class UCameraComponent;
 class USpringArmComponent;
 UCLASS()
@@ -26,6 +27,11 @@ public:
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
+
+    virtual void AddControllerYawInput(float Val) override;
+    virtual void AddControllerPitchInput(float Val) override;
+
+    virtual void AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce) override;
 
     // Receive notification of a collision contact and record that we're in contact with something.
     virtual void NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
@@ -59,17 +65,20 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BallBearing)
     float MaximumSpeed = 4.0f;
 
+    FVector ForwardLocation;
+    FVector RightLocation;
+
 private:
     // Move the ball bearing with the given force longitudinally on the X axis.
     void MoveLongitudinally(float value)
     {
-        InputLongitude = value;
+        AddMovementInput(ForwardLocation, value, true);
     }
 
     // Move the ball bearing with the given force longitudinally on the Y axis.
     void MoveLaterally(float value)
     {
-        InputLatitude = value;
+        AddMovementInput(RightLocation, value, true);
     }
 
     // The current longitude input received from the player.
@@ -78,6 +87,10 @@ private:
     // The current latitude input received from the player.
     float InputLatitude = 0.0f;
 
-    // Update Move good ball
-    void UpdateMoveBall();
+    // Update forward vector location
+    void UpdateForwardLocation();
+
+    // Update right vector location
+    void UpdateRightLocation();
+
 };
