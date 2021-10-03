@@ -101,6 +101,9 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 {
     if (this->CurrentGameState == NewState)
         return;
+
+    if (NewState == EGameLevelState::WaitToStart || NewState == EGameLevelState::GameOver)
+    
     if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
     {
         GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
@@ -110,6 +113,8 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
     if (this->CurrentGameState == EGameLevelState::InProgress && NewState == EGameLevelState::GameOver)
     {
         GetWorld()->GetTimerManager().ClearTimer(this->HandleUpTime);
+        for(auto TempBadBall : this->ArrayBadBalls)
+            TempBadBall->StateMove = false;
     }
     this->CurrentGameState = NewState;
     this->OnGameLevelStateChanged.Broadcast(NewState);
