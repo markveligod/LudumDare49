@@ -89,7 +89,7 @@ void AGameJamModeBase::StartPlay()
 
 
     this->GoodBall = Cast<AGoodBallPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AGoodBallPawn::StaticClass()));
-    check(this->GoodBall);
+  //  check(this->GoodBall);
 
     this->MaxRunGameOver = this->StartMaxRunGameOver;
     this->RateTimeCallUp = this->StartRateTimeCallUp;
