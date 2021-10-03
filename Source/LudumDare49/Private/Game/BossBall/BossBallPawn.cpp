@@ -36,19 +36,22 @@ void ABossBallPawn::BeginPlay()
 void ABossBallPawn::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+   // if (OtherActor) UE_LOG(LogBossBall, Warning, TEXT("overlap: %s"), *OtherActor->GetName());
+
     auto Pillar = Cast<ABossPillar>(OtherActor);
     if (!Pillar) return;
-    Pillar->OnPillarHit();
 
     CurrentHealth--;
-
+    UE_LOG(LogBossBall, Warning, TEXT("overlap: %i"), CurrentHealth);
     if (CurrentHealth <= 0)
     {
-        auto Neutron = GetWorld()->SpawnActor<ANeutronActor>(NeutronActor);
 
+        auto Neutron = GetWorld()->SpawnActor<ANeutronActor>(NeutronActor);
+        if (!Neutron) return;
         auto NeutronSpawnLocation = GetActorLocation();
         Neutron->SetActorLocation(NeutronSpawnLocation);
         Neutron->SetNeutronCount(AmountOfNeutronsAfterDeath);
+
         Death();
     }
 }

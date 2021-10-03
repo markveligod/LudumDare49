@@ -18,8 +18,6 @@ public:
     // Sets default values for this actor's properties
     ABossPillar();
 
-    void OnPillarHit();
-
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -30,6 +28,18 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     UCapsuleComponent* CapsuleComponent = nullptr;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    bool bGotHit;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UMaterialInterface* GlowMaterial;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UMaterialInterface* BaseMaterial;
+
+private:
+    UFUNCTION()
+    void OnPillarBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+        bool bFromSweep, const FHitResult& SweepResult);
+
+    FTimerHandle SetCollisionTimerHandle;
+
+    void SetCollisionDisabled();
 };
