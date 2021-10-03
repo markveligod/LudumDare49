@@ -21,12 +21,16 @@ public:
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    bool StateMove = true;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UStaticMeshComponent* Mesh = nullptr;
+    
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-    UStaticMeshComponent* Mesh = nullptr;
+
 
     UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Movement")
     float MinMoveImpulse = 1.0f;

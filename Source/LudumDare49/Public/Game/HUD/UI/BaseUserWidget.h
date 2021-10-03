@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseUserWidget.generated.h"
 
+class UMSBJGameInstance;
 class AGameJamModeBase;
 
 UENUM(BlueprintType)
@@ -38,6 +39,8 @@ protected:
     // Getting current game mode
     AGameJamModeBase* GetGameMode() { return (this->GameMode); }
 
+    UMSBJGameInstance* GetGameInstance() { return (this->GameInstance); }
+
     // Native init
     virtual void NativeOnInitialized() override;
 
@@ -48,4 +51,5 @@ protected:
 private:
     // Pointer on Game mode
     AGameJamModeBase* GameMode;
+    UMSBJGameInstance* GameInstance;
 };

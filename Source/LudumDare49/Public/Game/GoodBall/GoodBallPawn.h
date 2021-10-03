@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "GoodBallPawn.generated.h"
 
+class AGameJamModeBase;
 class UArrowComponent;
 class UCameraComponent;
 class USpringArmComponent;
@@ -24,6 +25,9 @@ public:
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    // Ball state
+    bool StateMove = true;
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -35,12 +39,7 @@ protected:
 
     // Receive notification of a collision contact and record that we're in contact with something.
     virtual void NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
-        FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hitResult) override
-    {
-        Super::NotifyHit(myComponent, other, otherComp, selfMoved, hitLocation, hitNormal, normalImpulse, hitResult);
-
-        InContact = true;
-    }
+        FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hitResult) override;
 
     // Is the ball bearing in contact with any other geometry?
     bool InContact = false;
@@ -69,16 +68,20 @@ protected:
     FVector RightLocation;
 
 private:
+    AGameJamModeBase* GameMode;
+
+    void UpperKeyDrop();
+    
     // Move the ball bearing with the given force longitudinally on the X axis.
     void MoveLongitudinally(float value)
     {
-        AddMovementInput(ForwardLocation, value, true);
+            this->AddMovementInput(ForwardLocation, value, true);
     }
 
     // Move the ball bearing with the given force longitudinally on the Y axis.
     void MoveLaterally(float value)
     {
-        AddMovementInput(RightLocation, value, true);
+            this->AddMovementInput(RightLocation, value, true);
     }
 
     // The current longitude input received from the player.

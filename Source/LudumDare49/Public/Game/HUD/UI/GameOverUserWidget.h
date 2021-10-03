@@ -6,12 +6,31 @@
 #include "Game/HUD/UI/BaseUserWidget.h"
 #include "GameOverUserWidget.generated.h"
 
+class UButton;
+class UImage;
 /**
  * 
  */
 UCLASS()
 class LUDUMDARE49_API UGameOverUserWidget : public UBaseUserWidget
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
+protected:
+    virtual void NativeOnInitialized() override;
+
+    virtual void ShowAnimStart() override;
+
+    UPROPERTY(Transient, meta = (BindWidget))
+    UImage* BlackImage;
+    UPROPERTY(Transient, meta = (BindWidget))
+    UButton* MainMenuButton;
+
+private:
+    FTimerHandle TimerOnStart;
+
+    UFUNCTION()
+    void ClickButtonToMenu();
+
+    void HideBlackImage();
 };

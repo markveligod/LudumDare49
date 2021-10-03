@@ -35,7 +35,7 @@ void ABadBallPawn::StopMove() {}
 
 void ABadBallPawn::MoveImpulse() 
 {
-    
+    if (!this->StateMove) return;
     //////////////////// choosing forse ///////////////////////////////// choosing direction
     float XDirection = FMath::RandRange(MinMoveImpulse, MaxMoveImpulse) * FMath::RandRange(-1,1);
     float YDirection = FMath::RandRange(MinMoveImpulse, MaxMoveImpulse) * FMath::RandRange(-1, 1);
