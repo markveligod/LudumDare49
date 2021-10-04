@@ -32,6 +32,10 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
+     virtual void NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
+        FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hitResult) override;
+
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Niagara")
     UNiagaraSystem* BossDeathEffect;
 
@@ -77,6 +81,6 @@ private:
 
     int32 CurrentHealth = 3;
     void Death();
-
+    FTimerHandle SetCollisionTimerHandle;
     FTimerHandle MoveImpulseTimerHandle;
 };

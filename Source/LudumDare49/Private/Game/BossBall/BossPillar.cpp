@@ -18,7 +18,7 @@ ABossPillar::ABossPillar()
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
     Mesh->SetupAttachment(this->CapsuleComponent);
 
-    CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABossPillar::OnPillarBeginOverlap);
+  //  CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABossPillar::OnPillarBeginOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -27,18 +27,29 @@ void ABossPillar::BeginPlay()
     Super::BeginPlay();
 }
 
-void ABossPillar::OnPillarBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ABossPillar::NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
+    FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hitResult)
 {
-    if (OtherActor && OtherActor->IsA(ABossBallPawn::StaticClass()))
+    Super::NotifyHit(myComponent, other, otherComp, selfMoved, hitLocation, hitNormal, normalImpulse, hitResult);
+
+    if (other && other->IsA(ABossBallPawn::StaticClass()))
     {
-        UE_LOG(LogBossPillar, Warning, TEXT("overlap: %s"), *OtherActor->GetName());
+        UE_LOG(LogBossPillar, Warning, TEXT("overlap: %s"), *other->GetName());
         GetWorldTimerManager().SetTimer(SetCollisionTimerHandle, this, &ABossPillar::SetCollisionDisabled, 0.25f, false);
     }
 }
 
+void ABossPillar::OnPillarBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
 void ABossPillar::SetCollisionDisabled()
 {
+    UE_LOG(LogBossPillar, Warning, TEXT("SetCollision"));
+
+
     Mesh->SetMaterial(0, BaseMaterial);
+    CanHit = false;
     this->CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
