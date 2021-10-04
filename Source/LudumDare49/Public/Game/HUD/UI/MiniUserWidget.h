@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MiniUserWidget.generated.h"
 
+class USoundCue;
 class AGameJamModeBase;
 /**
  * 
@@ -22,10 +23,20 @@ public:
     int32 MaxRunGameOver = 100;
     UPROPERTY(BlueprintReadOnly)
     int32 CurrentCount = 0;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sounds")
+    USoundCue* StartMini;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sounds")
+    USoundCue* LoopMini;
+
+    UAudioComponent* LoopMiniComponent;
     
     FTimerHandle TimerHandleUp;
 protected:
     virtual void NativeOnInitialized() override;
+
+    UPROPERTY(Transient, meta = (BindWidgetAnim))
+    UWidgetAnimation* LoopAnim;
 
 private:
     AGameJamModeBase* GameMode;

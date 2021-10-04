@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "GoodBallPawn.generated.h"
 
+class USoundCue;
 class AGameJamModeBase;
 class UArrowComponent;
 class UCameraComponent;
@@ -64,6 +65,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BallBearing)
     float MaximumSpeed = 4.0f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BallBearing)
+    USoundCue* SpaceSound;
+    
     FVector ForwardLocation;
     FVector RightLocation;
 

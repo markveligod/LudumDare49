@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "NeutronActor.generated.h"
 
+class USoundCue;
 class USphereComponent;
 UCLASS()
 class LUDUMDARE49_API ANeutronActor : public AActor
@@ -41,6 +42,8 @@ protected:
 
     UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Settings Neutron")
     int32 CountNeutron = 5;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sounds")
+    USoundCue* PickUpSound;
 
 private:
     UFUNCTION()

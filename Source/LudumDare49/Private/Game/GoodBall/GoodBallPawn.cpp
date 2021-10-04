@@ -10,6 +10,8 @@
 #include "Game/BadBall/BadBallPawn.h"
 #include "Game/GameJamModeBase.h"
 #include "Game/BossBall/BossBallPawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AGoodBallPawn::AGoodBallPawn()
@@ -121,6 +123,7 @@ void AGoodBallPawn::UpperKeyDrop()
 {
     if (this->GameMode->StateMini)
     {
+        UGameplayStatics::PlaySound2D(GetWorld(), this->SpaceSound);
         this->GameMode->CurrentKeyDrop += 1;
         if (this->GameMode->CurrentKeyDrop == this->GameMode->MaxKeyDrop)
             this->GameMode->StopMini();

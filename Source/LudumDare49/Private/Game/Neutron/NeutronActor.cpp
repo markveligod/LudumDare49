@@ -5,6 +5,8 @@
 #include "Components/SphereComponent.h"
 #include "Game/GameJamModeBase.h"
 #include "Game/GoodBall/GoodBallPawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 ANeutronActor::ANeutronActor()
@@ -50,6 +52,7 @@ void ANeutronActor::RegisterBeginOverlapCollision(UPrimitiveComponent* Overlappe
     {
         auto GameMode = Cast<AGameJamModeBase>(GetWorld()->GetAuthGameMode());
         GameMode->Neutrons += this->CountNeutron;
+        UGameplayStatics::PlaySound2D(GetWorld(), this->PickUpSound);
         Destroy();
     }
 }

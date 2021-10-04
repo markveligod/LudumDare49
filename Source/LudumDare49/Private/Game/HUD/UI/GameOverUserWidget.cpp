@@ -2,7 +2,7 @@
 
 
 #include "Game/HUD/UI/GameOverUserWidget.h"
-
+#include "Sound/SoundCue.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
@@ -17,7 +17,9 @@ void UGameOverUserWidget::NativeOnInitialized()
 
 void UGameOverUserWidget::ShowAnimStart()
 {
-    GetWorld()->GetTimerManager().SetTimer(this->TimerOnStart, this, &UGameOverUserWidget::HideBlackImage, MapTimeOutRate[EStateAnimPlay::StartAnim]);
+    GetWorld()->GetTimerManager().SetTimer(this->TimerOnStart, this, &UGameOverUserWidget::HideBlackImage,
+        MapTimeOutRate[EStateAnimPlay::StartAnim]);
+    PlaySound(this->BoomSound);
     Super::ShowAnimStart();
 }
 

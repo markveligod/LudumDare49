@@ -15,6 +15,7 @@
 #include "Game/HUD/UI/MiniUserWidget.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameJamModeBase, All, All);
 
@@ -65,6 +66,8 @@ void AGameJamModeBase::StartMini(ABadBallPawn* BadBallRef)
 void AGameJamModeBase::StopMini()
 {
     GetWorld()->GetTimerManager().ClearTimer(this->WidgetMiniPointer->TimerHandleUp);
+    this->WidgetMiniPointer->LoopMiniComponent->Stop();
+    this->WidgetMiniPointer->LoopMiniComponent->DestroyComponent();
     this->WidgetMiniPointer->RemoveFromViewport();
     this->WidgetMiniPointer->Destruct();
     this->GoodBall->StateMove = true;

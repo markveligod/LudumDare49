@@ -6,6 +6,7 @@
 #include "Game/HUD/UI/BaseUserWidget.h"
 #include "GameOverUserWidget.generated.h"
 
+class USoundCue;
 class UButton;
 class UImage;
 /**
@@ -28,6 +29,9 @@ protected:
     UPROPERTY(Transient, meta = (BindWidget))
     UButton* RestartButton;
 
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sounds")
+    USoundCue* BoomSound;
 private:
     FTimerHandle TimerOnStart;
 
