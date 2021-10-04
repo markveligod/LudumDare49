@@ -24,11 +24,7 @@ void ABadBallPawn::BeginPlay()
     StartMove();
 }
 
-void ABadBallPawn::BeginDestroy()
-{
-    UGameplayStatics::PlaySoundAtLocation(GetWorld(), this->DeathSound, GetActorLocation());
-    Super::BeginDestroy();
-}
+
 
 void ABadBallPawn::StartMove()
 {

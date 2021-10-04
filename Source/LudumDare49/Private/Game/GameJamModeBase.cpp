@@ -16,6 +16,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameJamModeBase, All, All);
 
@@ -75,6 +76,7 @@ void AGameJamModeBase::StopMini()
     this->RateTimeCallUp -= this->DecreaseRunTime;
     this->StateMini = false;
     UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->DeathEffect, this->BadBallPointer->GetActorLocation());
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), this->DeathSoundBall, this->BadBallPointer->GetActorLocation());
     this->BadBallPointer->Destroy();
     
     for (auto TempBall : this->ArrayBadBalls)

@@ -66,6 +66,8 @@ public:
     int32 DecreaseCountMax = 5;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     UNiagaraSystem* DeathEffect;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sounds")
+    USoundCue* DeathSoundBall;
 protected:
     virtual void StartPlay() override;
 

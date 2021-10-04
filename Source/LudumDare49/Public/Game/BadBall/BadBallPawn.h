@@ -32,10 +32,7 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    virtual void BeginDestroy() override;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sounds")
-    USoundCue* DeathSound;
+    
 
     UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Movement")
     float MinMoveImpulse = 1.0f;
