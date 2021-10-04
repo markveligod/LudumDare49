@@ -34,6 +34,7 @@ void ABossBallPawn::BeginPlay()
 
     GetWorldTimerManager().SetTimer(
         MoveImpulseTimerHandle, this, &ABossBallPawn::MoveImpulse, MoveImpulseDelay, true, FMath::RandRange(0.1f, 0.5f));
+    CurrentHealth = MaxHealth;
 }
 
 void ABossBallPawn::NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
@@ -77,11 +78,12 @@ void ABossBallPawn::NotifyHit(UPrimitiveComponent* myComponent, AActor* other, U
 
     if (CurrentHealth <= 0)
     {
-        auto Neutron = GetWorld()->SpawnActor<ANeutronActor>(NeutronActor);
+        FTransform Transform;
+        Transform.SetLocation(FVector(GetActorLocation().X, GetActorLocation().Y,150.f));
+
+        auto Neutron = GetWorld()->SpawnActor<ANeutronActor>(NeutronActor, Transform);
         if (!Neutron) return;
-        auto NeutronSpawnLocation = GetActorLocation();
-        NeutronSpawnLocation.Z = 120.0f;
-        Neutron->SetActorLocation(NeutronSpawnLocation);
+
         Neutron->SetNeutronCount(AmountOfNeutronsAfterDeath);
         GetWorldTimerManager().SetTimer(SetCollisionTimerHandle, this, &ABossBallPawn::Death, 0.25f, false);
     }
