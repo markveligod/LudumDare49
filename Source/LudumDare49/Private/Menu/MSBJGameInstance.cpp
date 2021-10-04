@@ -26,7 +26,7 @@ void UMSBJGameInstance::Init()
     this->SetCurrentWindowMode(EWindowMode::Fullscreen);
     UE_LOG(LogMSBJGameInstance, Display, TEXT("Default Window Mode: Fullscreen type"))
 
-    this->CurrentLanguage = UKismetSystemLibrary::GetDefaultLanguage();
+    this->CurrentLanguage = "en";
     UE_LOG(LogMSBJGameInstance, Display, TEXT("Default Language: %s"), *this->CurrentLanguage);
 
     this->SetMusicVolumeValue(this->DefaultMusicVolumeValue);
