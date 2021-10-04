@@ -109,7 +109,7 @@ void AGameJamModeBase::StartPlay()
 
 void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 {
-    UE_LOG(LogGameJamModeBase, Display, TEXT("New State: %s"), *UEnum::GetValueAsString(NewState));
+    UE_LOG(LogGameJamModeBase, Warning, TEXT("New State: %s"), *UEnum::GetValueAsString(NewState));
     if (NewState == EGameLevelState::WaitToStart || NewState == EGameLevelState::GameOver)
     {
         for (auto TempBadBall : this->ArrayBadBalls)
@@ -121,6 +121,7 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 
     if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
     {
+        UE_LOG(LogGameJamModeBase, Warning, TEXT("New State: %s"), *UEnum::GetValueAsString(NewState));
         GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
         GetWorld()->GetTimerManager().SetTimer(this->HandleDecreaseTimer, this, &AGameJamModeBase::DecreaseCount, this->RateTimeDecrease,
             true);
