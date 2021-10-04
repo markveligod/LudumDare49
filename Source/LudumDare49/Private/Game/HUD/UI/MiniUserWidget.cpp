@@ -14,7 +14,6 @@ void UMiniUserWidget::NativeOnInitialized()
     Super::NativeOnInitialized();
     this->GameMode = Cast<AGameJamModeBase>(GetWorld()->GetAuthGameMode());
     check(this->GameMode);
-    
 }
 
 void UMiniUserWidget::UpdateTime()

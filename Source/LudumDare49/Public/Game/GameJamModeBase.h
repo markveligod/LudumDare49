@@ -46,7 +46,7 @@ public:
     UMiniUserWidget* WidgetMiniPointer;
 
     UPROPERTY(BlueprintReadOnly)
-    int32 MaxKeyDrop = 20;
+    int32 MaxKeyDrop = 10;
     UPROPERTY(BlueprintReadOnly)
     int32 CurrentKeyDrop = 0;
     float RateTimeCallUp;
@@ -57,7 +57,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings Mini loli-pop")
     int32 OnUpKeydrop = 5;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings Mini loli-pop")
-    int32 StartMaxRunGameOver = 20;
+    int32 StartMaxRunGameOver = 50;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings Mini loli-pop")
     float StartRateTimeCallUp = 1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings Mini loli-pop")

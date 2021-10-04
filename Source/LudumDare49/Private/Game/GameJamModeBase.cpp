@@ -63,14 +63,15 @@ void AGameJamModeBase::StartMini(ABadBallPawn* BadBallRef)
 void AGameJamModeBase::StopMini()
 {
     GetWorld()->GetTimerManager().ClearTimer(this->WidgetMiniPointer->TimerHandleUp);
+    this->WidgetMiniPointer->RemoveFromViewport();
+    this->WidgetMiniPointer->Destruct();
     this->GoodBall->StateMove = true;
     this->MaxRunGameOver -= this->DecreaseCountMax;
-    this->RateTimeDecrease -= this->DecreaseRunTime;
+    this->RateTimeCallUp -= this->DecreaseRunTime;
     this->StateMini = false;
     UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->DeathEffect, this->BadBallPointer->GetActorLocation());
     this->BadBallPointer->Destroy();
-    this->WidgetMiniPointer->RemoveFromViewport();
-    this->WidgetMiniPointer->Destruct();
+    
     for (auto TempBall : this->ArrayBadBalls)
         TempBall->StateMove = true;
 }
@@ -118,7 +119,13 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
             TempBoss->StateMove = false;
         
     }
-
+    if (NewState == EGameLevelState::GameOver && this->StateMini)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(this->WidgetMiniPointer->TimerHandleUp);
+        this->WidgetMiniPointer->RemoveFromViewport();
+        this->WidgetMiniPointer->Destruct();
+        this->StateMini = false;
+    }
     if (this->CurrentGameState == EGameLevelState::WaitToStart && NewState == EGameLevelState::InProgress)
     {
         GetWorld()->GetTimerManager().SetTimer(this->HandleUpTime, this, &AGameJamModeBase::IncrementTime, 1.f, true);
