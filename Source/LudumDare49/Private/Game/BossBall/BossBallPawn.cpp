@@ -2,6 +2,7 @@
 
 #include "Game/BossBall/BossBallPawn.h"
 #include "Game/BossBall/BossPillar.h"
+#include "Game/BadBall/BadBallPawn.h"
 #include "Game/Neutron/NeutronActor.h"
 #include "Game/GoodBall/GoodBallPawn.h"
 #include "Components/StaticMeshComponent.h"
@@ -37,13 +38,19 @@ void ABossBallPawn::BeginPlay()
 void ABossBallPawn::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-   // if (OtherActor) UE_LOG(LogBossBall, Warning, TEXT("overlap: %s"), *OtherActor->GetName());
+
+    auto BadBall = Cast<ABadBallPawn>(OtherActor);
+    if (BadBall)
+    {
+        UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->BadBallDeathEffect, BadBall->GetActorLocation());
+        BadBall->Destroy();
+    }
 
     auto Pillar = Cast<ABossPillar>(OtherActor);
     if (!Pillar) return;
-
     CurrentHealth--;
     UE_LOG(LogBossBall, Warning, TEXT("overlap: %i"), CurrentHealth);
+
     if (CurrentHealth <= 0)
     {
 
@@ -68,8 +75,14 @@ void ABossBallPawn::MoveImpulse()
     ImpulseDirection = PlayerPawn->GetActorLocation() - this->GetActorLocation();  // vector from BossBall to GoodBall
 
     if (ImpulseDirection.Size() > MaxDetectDistance) return;  // max range of detecting GoodBall
-    if (this->StateMove == false) return;
-    
+
+    if (this->StateMove == false)
+    {
+        this->Mesh->ComponentVelocity = FVector(0.f, 0.f, 0.f);
+        return;
+    }
+    if (!this->StateMove) UE_LOG(LogBossBall, Warning, TEXT("StateMove FALSE"));
+
     // add random deviation of impulse to base vector
     ImpulseDirection = ImpulseDirection + MoveImpulseScale * FVector(                                                         //
                                                                  FMath::RandRange(MinDeviationImpulse, MaxDeviationImpulse),  // X
@@ -82,7 +95,7 @@ void ABossBallPawn::MoveImpulse()
 
 void ABossBallPawn::Death()
 {
-    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->DeathEffect, GetActorLocation());
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->BossDeathEffect, GetActorLocation());
     this->Destroy();
 }
 

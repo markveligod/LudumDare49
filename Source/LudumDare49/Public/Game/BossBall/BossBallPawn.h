@@ -33,8 +33,11 @@ protected:
     virtual void BeginPlay() override;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Niagara")
-    UNiagaraSystem* DeathEffect;
-    
+    UNiagaraSystem* BossDeathEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Niagara")
+    UNiagaraSystem* BadBallDeathEffect;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     UStaticMeshComponent* Mesh = nullptr;
 
