@@ -52,7 +52,7 @@ void ABossBallPawn::NotifyHit(UPrimitiveComponent* myComponent, AActor* other, U
         UNiagaraFunctionLibrary::SpawnSystemAtLocation(
             GetWorld(), this->BadBallDeathEffect, GoodBall->GetActorLocation() + FVector(0.f, 50.f, 0.f));
 
-        GetWorldTimerManager().SetTimer(SetCollisionTimerHandle, this, &ABossBallPawn::Death, 0.25f, false);
+       // GetWorldTimerManager().SetTimer(SetCollisionTimerHandle, this, &ABossBallPawn::Death, 0.25f, false);
         return;
     }
 
