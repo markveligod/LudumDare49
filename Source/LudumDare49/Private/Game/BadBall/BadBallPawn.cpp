@@ -2,6 +2,7 @@
 
 #include "Game/BadBall/BadBallPawn.h"
 #include "Engine/World.h"
+#include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBadBall, All, All)
@@ -21,6 +22,12 @@ void ABadBallPawn::BeginPlay()
     Super::BeginPlay();
 
     StartMove();
+}
+
+void ABadBallPawn::BeginDestroy()
+{
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), this->DeathSound, GetActorLocation());
+    Super::BeginDestroy();
 }
 
 void ABadBallPawn::StartMove()

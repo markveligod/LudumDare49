@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBossBall, All, All)
 
@@ -76,7 +77,6 @@ void ABossBallPawn::NotifyHit(UPrimitiveComponent* myComponent, AActor* other, U
 
     if (CurrentHealth <= 0)
     {
-
         auto Neutron = GetWorld()->SpawnActor<ANeutronActor>(NeutronActor);
         if (!Neutron) return;
         auto NeutronSpawnLocation = GetActorLocation();
@@ -124,6 +124,7 @@ void ABossBallPawn::MoveImpulse()
 void ABossBallPawn::Death()
 {
     UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), this->BossDeathEffect, GetActorLocation());
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), this->DeathSound, GetActorLocation());
     this->Destroy();
 }
 
