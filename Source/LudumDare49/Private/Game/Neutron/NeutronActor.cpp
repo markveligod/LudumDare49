@@ -58,7 +58,7 @@ void ANeutronActor::RegisterBeginOverlapCollision(UPrimitiveComponent* Overlappe
 void ANeutronActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    this->FirstMesh->AddRelativeRotation(FRotator(1.f, 0.f, 0.f));
+    this->FirstMesh->AddRelativeRotation(FRotator(0.f, 1.f, 0.f));
     this->SecondMesh->AddRelativeRotation(FRotator( 1.f, 1.f, 0.f));
     this->ThirdMesh->AddRelativeRotation(FRotator(0.f, 0.f, 1.f));
 
