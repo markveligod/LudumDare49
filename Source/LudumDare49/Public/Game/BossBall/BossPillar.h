@@ -18,6 +18,8 @@ public:
     // Sets default values for this actor's properties
     ABossPillar();
 
+    bool CanHit =true;
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -33,6 +35,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     UMaterialInterface* BaseMaterial;
+
+
+
+
+    virtual void NotifyHit(UPrimitiveComponent* myComponent, AActor* other, UPrimitiveComponent* otherComp, bool selfMoved,
+        FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hitResult) override;
 
 private:
     UFUNCTION()
