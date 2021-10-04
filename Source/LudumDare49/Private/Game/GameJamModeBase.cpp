@@ -157,6 +157,7 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
 void AGameJamModeBase::SetupStartLevelSettings()
 {
     UKismetInternationalizationLibrary::SetCurrentCulture(this->GameInst->GetCurrentLanguage(), false);
+    UE_LOG(LogGameJamModeBase, Display, TEXT("Default Language: %s"), *this->GameInst->GetCurrentLanguage());
     this->UserSettings->SetFullscreenMode(this->GameInst->GetCurrentWindowMode());
     this->UserSettings->SetScreenResolution(this->GameInst->GetScreenViewport());
     this->UserSettings->SetAntiAliasingQuality(this->GameInst->GetCurrentQualityValue());

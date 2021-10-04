@@ -84,11 +84,13 @@ void UMSBJOptionsWidget::OnFullScreenCheck(bool bIsChecked)
 void UMSBJOptionsWidget::OnRuLangChanged()
 {
     UKismetInternationalizationLibrary::SetCurrentCulture(FString("ru-RU"), false);
+    this->GameInst->SetCurrentLanguage(FString("ru-RU"));
 }
 
 void UMSBJOptionsWidget::OnEnLangChanged()
 {
     UKismetInternationalizationLibrary::SetCurrentCulture(FString("en"), false);
+    this->GameInst->SetCurrentLanguage(FString("en"));
 }
 
 void UMSBJOptionsWidget::OnClickScreenArrowLeft()
