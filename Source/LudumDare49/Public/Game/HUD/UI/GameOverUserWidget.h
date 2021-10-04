@@ -25,6 +25,8 @@ protected:
     UImage* BlackImage;
     UPROPERTY(Transient, meta = (BindWidget))
     UButton* MainMenuButton;
+    UPROPERTY(Transient, meta = (BindWidget))
+    UButton* RestartButton;
 
 private:
     FTimerHandle TimerOnStart;
@@ -32,5 +34,8 @@ private:
     UFUNCTION()
     void ClickButtonToMenu();
 
+    UFUNCTION()
+    void RestartGame();
+    
     void HideBlackImage();
 };

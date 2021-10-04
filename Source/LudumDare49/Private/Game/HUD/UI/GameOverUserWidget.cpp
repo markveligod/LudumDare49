@@ -12,6 +12,7 @@ void UGameOverUserWidget::NativeOnInitialized()
 {
     Super::NativeOnInitialized();
     this->MainMenuButton->OnClicked.AddDynamic(this, &UGameOverUserWidget::ClickButtonToMenu);
+    this->RestartButton->OnClicked.AddDynamic(this, &UGameOverUserWidget::RestartGame);
 }
 
 void UGameOverUserWidget::ShowAnimStart()
@@ -23,6 +24,11 @@ void UGameOverUserWidget::ShowAnimStart()
 void UGameOverUserWidget::ClickButtonToMenu()
 {
     UGameplayStatics::OpenLevel(GetWorld(), GetGameInstance()->NameMenuLevel);
+}
+
+void UGameOverUserWidget::RestartGame()
+{
+    UGameplayStatics::OpenLevel(GetWorld(), GetGameInstance()->NameStartLevel);
 }
 
 void UGameOverUserWidget::HideBlackImage()

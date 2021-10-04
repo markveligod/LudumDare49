@@ -47,6 +47,8 @@ void AGameJamModeBase::StartMini(ABadBallPawn* BadBallRef)
 {
     for (auto TempBall : this->ArrayBadBalls)
         TempBall->StateMove = false;
+    for (auto TempBoss : this->ArrayBoss)
+        TempBoss->StateMove = false;
     this->BadBallPointer = BadBallRef;
     this->BadBallPointer->Mesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
     this->MaxKeyDrop += this->OnUpKeydrop;
@@ -74,6 +76,8 @@ void AGameJamModeBase::StopMini()
     
     for (auto TempBall : this->ArrayBadBalls)
         TempBall->StateMove = true;
+    for (auto TempBoss : this->ArrayBoss)
+        TempBoss->StateMove = true;
 }
 
 void AGameJamModeBase::StartPlay()
@@ -117,7 +121,6 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
             TempBadBall->StateMove = false;
         for (auto TempBoss : this->ArrayBoss)
             TempBoss->StateMove = false;
-        
     }
     if (NewState == EGameLevelState::GameOver && this->StateMini)
     {
@@ -140,6 +143,7 @@ void AGameJamModeBase::ChangeGameState(EGameLevelState NewState)
     if (this->CurrentGameState == EGameLevelState::InProgress && NewState == EGameLevelState::GameOver)
     {
         GetWorld()->GetTimerManager().ClearTimer(this->HandleUpTime);
+        GetWorld()->GetTimerManager().ClearTimer(this->HandleDecreaseTimer);
     }
     this->CurrentGameState = NewState;
     this->OnGameLevelStateChanged.Broadcast(NewState);
